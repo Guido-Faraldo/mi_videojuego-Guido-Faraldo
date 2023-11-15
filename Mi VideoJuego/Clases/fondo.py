@@ -1,4 +1,3 @@
-import pygame
 from Clases.imagen import Imagen
 
 class Fondo(Imagen):
