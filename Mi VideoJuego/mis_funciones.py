@@ -1,4 +1,56 @@
 import pygame
+import sqlite3
+
+def crear_tabla(path):
+    with sqlite3.connect(path) as conexion:
+        try:
+            sentencia = ''' create table puntos
+            (
+            id integer primary key autoincrement,
+            nombre text, 
+            puntaje int
+            )
+            '''
+            conexion.execute(sentencia)
+            print("Se creo la tabla puntos")
+        except:
+            print("La tabla puntos ya existe")
+
+    return conexion
+
+
+def agregar_dato_tabla(conexion, nombre_usuario, puntaje):
+    try:
+        conexion.execute("insert into puntos(nombre,puntaje) values (?,?)", (nombre_usuario, puntaje))
+        conexion.commit()
+    except:
+        print("Error")
+
+
+def separar_cinco_mejores(conexion):
+    lista = []
+    cursor = conexion.execute("SELECT * FROM puntos ORDER BY puntaje DESC LIMIT 5")
+    for fila in cursor:
+        dict_usuario = {}
+        dict_usuario['id'] = fila[0]
+        dict_usuario['nombre'] = fila[1]
+        dict_usuario['puntaje'] = fila[2]
+        lista.append(dict_usuario)
+    return lista
+
+
+def crear_texto_valores_tabla(conexion):
+    lista_tabla_puntaje = separar_cinco_mejores(conexion)
+    ids = ""
+    nombres = ""
+    puntaje = ""
+    for el in lista_tabla_puntaje:
+        ids = ids + "\n" + str(el['id'])
+        nombres = nombres + '\n' + el['nombre']
+        puntaje = puntaje + '\n' + str(el['puntaje'])
+    
+    return ids, nombres, puntaje
+
 
 def restaurar_img_y_rec(obj) -> None:
     '''Restaura la imagen y el rectangulo del objeto que se le pasa por parametro
@@ -109,6 +161,7 @@ def varificar_pos_luchador_en_bloque(luchador, piso_plataforma) -> bool:
         aplicar_gravedad = False
     else:
         aplicar_gravedad = True
+
     return aplicar_gravedad
 
 def aplicar_salto(luchador, gravedad, salto, plataforma, primer_piso, segundo_piso, tercer_piso):

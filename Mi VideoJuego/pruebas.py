@@ -5,6 +5,12 @@ pygame.init()
 
 SCREEN = pygame.display.set_mode((800, 600))
 
+ingreso = "HOLAAAAAAAA"
+for e in ingreso:
+    print(ingreso)
+    ingreso = ingreso[0:-1]
+    
+
 rectangles = []
 rect_speed = 5
 while True:

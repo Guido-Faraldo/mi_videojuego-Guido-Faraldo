@@ -52,6 +52,8 @@ rec_game_over = Rectangulo(POS_REC_GAME_OVER, TAMAÑO_REC_GAME_OVER, COLOR_VERDE
 rec_reiniciar = Rectangulo(POS_REC_REINICIAR, TAMAÑO_REC_REINICIAR, COLOR_AZUL)
 rec_texto_misiones = Rectangulo(POS_REC_MISIONES, TAMAÑO_REC_MISIONES, COLOR_VERDE)
 rec_texto_entendido = Rectangulo(POS_REC_ENTENDIDO, TAMAÑO_REC_ENTENDIDO, COLOR_VERDE)
+rec_ingreso_nombre = Rectangulo(POS_REC_INGRESO_USUARIO, TAMAÑO_REC_INGRESO_USUARIO, COLOR_VERDE)
+rec_puntaje = Rectangulo(POS_REC_PUNTAJE, TAMAÑO_REC_PUNTAJE, COLOR_VERDE)
 
 #POSICIONES POR DODNE APARECEN LOS RECTANGULOS--------------------------
 POS_VENENO_E_1 = [piso_bloque_grande_1.rec.x + piso_bloque_grande_1.base, 125]

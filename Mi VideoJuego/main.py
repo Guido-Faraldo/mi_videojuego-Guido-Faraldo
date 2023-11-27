@@ -8,6 +8,10 @@ from mis_objetos import *
 from mis_funciones import *
 
 pygame.init()
+conexion = crear_tabla("puntajes_mi_videojuego.bd")
+agregar_datos = False
+ingreso_usuario = True 
+nombre_usuario = ""
 contador_escorpiones_muertos = 0
 desaparecer_escorpion_1 = False
 desaparecer_escorpion_2 = False
@@ -48,9 +52,11 @@ texto_game_over = Texto("GAME OVER", COLOR_AZUL, POS_TEXTO_GAME_OVER, FUENTE_GRA
 texto_score = Texto("TU SCORE ES DE:", COLOR_AZUL, POS_TEXTO_SCORE, FUENTE_GRANDE)
 texto_reiniciar = Texto("REINICIAR", COLOR_VERDE, POS_TEXTO_REINICIAR, FUENTE_CHICA)
 texto_entendido = Texto("ENTENDIDO", COLOR_AZUL, POS_TEXTO_ENTENDIDO, FUENTE_CHICA)
+texto_ingrese_nombre = Texto("INGRESE NOMBRE", COLOR_ROJO, POS_TEXTO_INGRESE_NOMBRE, FUENTE_GRANDE)
 texto_mision_primer_nivel = Texto(TEXTO_PRIMER_NIVEL, COLOR_AZUL, POS_TEXTO_MISIONES, FUENTE_CHICA)
 texto_mision_segundo_nivel = Texto(TEXTO_SEGUNDO_NIVEL, COLOR_AZUL, POS_TEXTO_MISIONES, FUENTE_CHICA)
 texto_mision_tercer_nivel = Texto(TEXTO_TERCER_NIVEL, COLOR_AZUL, POS_TEXTO_MISIONES, FUENTE_CHICA)
+texto_cabezera_puntaje = Texto("Id     Nombre     Puntaje", COLOR_ROJO, POS_TEXTO_CABEZERA_PUNTAJE, FUENTE_CHICA)
 
 while True:
     lista_teclas = pygame.key.get_pressed()
@@ -59,11 +65,25 @@ while True:
             pygame.quit()
             sys.exit()
 
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                nombre_usuario = nombre_usuario[0:-1]
+            elif len(nombre_usuario) < 13:
+                nombre_usuario += event.unicode
+    
+    valores_tabla = crear_texto_valores_tabla(conexion)
+    ids = valores_tabla[0]
+    nombres = valores_tabla[1]
+    puntajes = valores_tabla[2]
+    texto_ids = Texto(ids, COLOR_AZUL, POS_TEXTO_IDS, FUENTE_CHICA)
+    texto_nombres = Texto(nombres, COLOR_AZUL, POS_TEXTO_NOMBRES, FUENTE_CHICA)
+    texto_puntajes = Texto(puntajes, COLOR_AZUL, POS_TEXTO_PUNTAJES, FUENTE_CHICA)
+    puntaje_int = contador_manzanas * 100.00
     milis = reloj.tick(60)
-
+    texto_nombre_usuario = Texto(nombre_usuario, COLOR_NEGRO, POS_TEXTO_NOMBRE_USUARIO, FUENTE_CHICA)
     luchador = Luchador(ruta_luchador, TAMAÑO_LUCHADOR, POS_LUCHADOR)
     texto_manzanas_comidas = Texto(F"MANZANAS COMIDAS: {contador_manzanas}", COLOR_ROJO, POS_TEXTO_MANZANAS_COMIDAS, FUENTE_CHICA)
-    texto_score_puntos = Texto(f"{contador_manzanas * 100.00} pts", COLOR_AZUL, POS_TEXTO_SCORE_PUNTOS, FUENTE_GRANDE)
+    texto_score_puntos = Texto(f"{puntaje_int} pts", COLOR_AZUL, POS_TEXTO_SCORE_PUNTOS, FUENTE_GRANDE)
     escorpion_1 = Escorpion(ruta_escorpion_1, TAMAÑO_ESCORPION, POS_ESCORPION_1)
     escorpion_2 = Escorpion(ruta_escorpion_2, TAMAÑO_ESCORPION, POS_ESCORPION_2)
     escorpion_3 = Escorpion(ruta_escorpion_3, TAMAÑO_ESCORPION, POS_ESCORPION_3)
@@ -79,7 +99,7 @@ while True:
     cuchillo_izquierda = Cuchillo(RUTA_CUCHILLO_IZQUIERDA, TAMAÑO_CUCHILLO, POS_CUCHILLO_IZQUIERDA)
 
     if event.type == pygame.MOUSEBUTTONDOWN:
-        if rec_reiniciar.rec.collidepoint(event.pos):
+        if rec_reiniciar.rec.collidepoint(event.pos) and game_over == True:
             restaurar_img_y_rec(corazon_1)
             restaurar_img_y_rec(corazon_2)
             restaurar_img_y_rec(corazon_3)
@@ -96,6 +116,12 @@ while True:
             rec_texto_misiones.dibujar(SCREEN)
             rec_texto_entendido.dibujar(SCREEN)
             texto_entendido.mostrar_texto(SCREEN)
+            ingreso_usuario = True
+            if agregar_datos:
+                agregar_dato_tabla(conexion, nombre_usuario, puntaje_int)
+                agregar_datos = False
+            nombre_usuario = ""
+            rec_reiniciar.disappear()
         if rec_texto_entendido.rec.collidepoint(event.pos):
             if nivel_dos == False and nivel_tres == False:
                 texto_mision_primer_nivel.desaparcer_texto()
@@ -157,35 +183,42 @@ while True:
 
     #Cargar las imagenes en la pantalla
     fondo.cargar_imagen(SCREEN)
-    texto_vidas.mostrar_texto(SCREEN)
-    texto_manzanas_comidas.mostrar_texto(SCREEN)
-    corazon_1.cargar_imagen(SCREEN)
-    corazon_2.cargar_imagen(SCREEN)
-    corazon_3.cargar_imagen(SCREEN)
-    piso_plataforma.cargar_imagen(SCREEN)
-    piso_bloque_grande_1.cargar_imagen(SCREEN)
-    piso_bloque_grande_2.cargar_imagen(SCREEN)
-    piso_bloque_grande_3.cargar_imagen(SCREEN)
-    piso_bloque_grande_4.cargar_imagen(SCREEN)
-    piso_bloque_chico_1.cargar_imagen(SCREEN)
-    piso_bloque_chico_2.cargar_imagen(SCREEN)
-    piso_bloque_chico_3.cargar_imagen(SCREEN)
-    manzana_1.cargar_imagen(SCREEN)
-    manzana_2.cargar_imagen(SCREEN)
-    manzana_3.cargar_imagen(SCREEN)
-    manzana_4.cargar_imagen(SCREEN)
-    manzana_5.cargar_imagen(SCREEN)
-    manzana_6.cargar_imagen(SCREEN)
-    manzana_7.cargar_imagen(SCREEN)
-    escorpion_1.cargar_imagen(SCREEN)
-    escorpion_2.cargar_imagen(SCREEN)
-    escorpion_3.cargar_imagen(SCREEN)
-    escorpion_4.cargar_imagen(SCREEN)
-    luchador.cargar_imagen(SCREEN)
-    rec_texto_misiones.dibujar(SCREEN)
-    rec_texto_entendido.dibujar(SCREEN)
-    texto_mision_primer_nivel.mostrar_texto_con_saltos(SCREEN)
-    texto_entendido.mostrar_texto(SCREEN)
+    if ingreso_usuario:
+        texto_ingrese_nombre.mostrar_texto(SCREEN)
+        rec_ingreso_nombre.dibujar(SCREEN)
+        texto_nombre_usuario.mostrar_texto(SCREEN)
+        if lista_teclas[pygame.K_RETURN]:
+            ingreso_usuario = False
+    else:
+        texto_vidas.mostrar_texto(SCREEN)
+        texto_manzanas_comidas.mostrar_texto(SCREEN)
+        corazon_1.cargar_imagen(SCREEN)
+        corazon_2.cargar_imagen(SCREEN)
+        corazon_3.cargar_imagen(SCREEN)
+        piso_plataforma.cargar_imagen(SCREEN)
+        piso_bloque_grande_1.cargar_imagen(SCREEN)
+        piso_bloque_grande_2.cargar_imagen(SCREEN)
+        piso_bloque_grande_3.cargar_imagen(SCREEN)
+        piso_bloque_grande_4.cargar_imagen(SCREEN)
+        piso_bloque_chico_1.cargar_imagen(SCREEN)
+        piso_bloque_chico_2.cargar_imagen(SCREEN)
+        piso_bloque_chico_3.cargar_imagen(SCREEN)
+        manzana_1.cargar_imagen(SCREEN)
+        manzana_2.cargar_imagen(SCREEN)
+        manzana_3.cargar_imagen(SCREEN)
+        manzana_4.cargar_imagen(SCREEN)
+        manzana_5.cargar_imagen(SCREEN)
+        manzana_6.cargar_imagen(SCREEN)
+        manzana_7.cargar_imagen(SCREEN)
+        escorpion_1.cargar_imagen(SCREEN)
+        escorpion_2.cargar_imagen(SCREEN)
+        escorpion_3.cargar_imagen(SCREEN)
+        escorpion_4.cargar_imagen(SCREEN)
+        luchador.cargar_imagen(SCREEN)
+        rec_texto_misiones.dibujar(SCREEN)
+        rec_texto_entendido.dibujar(SCREEN)
+        texto_mision_primer_nivel.mostrar_texto_con_saltos(SCREEN, [40, 35])
+        texto_entendido.mostrar_texto(SCREEN)
 
     if contador_manzanas == 7 and nivel_tres == False:
         POS_LUCHADOR = [60, 450]
@@ -196,9 +229,9 @@ while True:
         texto_entendido.volver_texto_normalidad()
         texto_entendido.mostrar_texto(SCREEN)
         if nivel_dos == False:
-            texto_mision_segundo_nivel.mostrar_texto_con_saltos(SCREEN)
+            texto_mision_segundo_nivel.mostrar_texto_con_saltos(SCREEN, [40, 35])
         elif nivel_dos:
-            texto_mision_tercer_nivel.mostrar_texto_con_saltos(SCREEN)
+            texto_mision_tercer_nivel.mostrar_texto_con_saltos(SCREEN, [40, 35])
 
     if nivel_dos and contador_manzanas < 7:
         veneno_e_1.cargar_imagen(SCREEN)
@@ -265,6 +298,8 @@ while True:
             game_over = True
 
     if game_over:
+        rec_reiniciar.recenter()
+        agregar_datos = True
         POS_ESCORPION_1 = [250, 120]
         POS_ESCORPION_2 = [750, 120]
         POS_ESCORPION_3 = [270, 415]
@@ -285,6 +320,11 @@ while True:
         texto_score.mostrar_texto(SCREEN)
         texto_score_puntos.mostrar_texto(SCREEN)
         texto_reiniciar.mostrar_texto(SCREEN)
+        rec_puntaje.dibujar(SCREEN)
+        texto_cabezera_puntaje.mostrar_texto(SCREEN)
+        texto_ids.mostrar_texto_con_saltos(SCREEN, [680, 160])
+        texto_nombres.mostrar_texto_con_saltos(SCREEN, [740, 160])
+        texto_puntajes.mostrar_texto_con_saltos(SCREEN, [900, 160])
     else:
         #Movimineto escorpiones
         var = escorpion_1.mover_escorpiones(direccion_escorpion_1, LIMITE_ESCORPION_1_IZQ, LIMITE_ESCORPION_1_DER, RUTAS_ESCORPION)
@@ -344,29 +384,32 @@ while True:
                 ruta_luchador = RUTA_LUCHADOR_SALTO_IZQUIERDA
 
     #Dibujar los rectangulos si mantengo apretado la tecla 'R'
-    if lista_teclas[pygame.K_r]:
-        cuchillo_derecha.dibujar_rectangulo(SCREEN)
-        cuchillo_izquierda.dibujar_rectangulo(SCREEN)
-        veneno_e_1.dibujar_rectangulo(SCREEN)
-        manzana_1.dibujar_rectangulo(SCREEN)
-        manzana_2.dibujar_rectangulo(SCREEN)
-        manzana_3.dibujar_rectangulo(SCREEN)
-        manzana_4.dibujar_rectangulo(SCREEN)
-        manzana_5.dibujar_rectangulo(SCREEN)
-        manzana_6.dibujar_rectangulo(SCREEN)
-        manzana_7.dibujar_rectangulo(SCREEN)
-        piso_plataforma.dibujar_rectangulo(SCREEN)
-        piso_bloque_grande_1.dibujar_rectangulo(SCREEN)
-        piso_bloque_grande_2.dibujar_rectangulo(SCREEN)
-        piso_bloque_grande_3.dibujar_rectangulo(SCREEN)
-        piso_bloque_grande_4.dibujar_rectangulo(SCREEN)
-        piso_bloque_chico_1.dibujar_rectangulo(SCREEN)
-        piso_bloque_chico_2.dibujar_rectangulo(SCREEN)
-        piso_bloque_chico_3.dibujar_rectangulo(SCREEN)
-        escorpion_1.dibujar_rectangulo(SCREEN)
-        escorpion_2.dibujar_rectangulo(SCREEN)
-        escorpion_3.dibujar_rectangulo(SCREEN)
-        escorpion_4.dibujar_rectangulo(SCREEN)
-        luchador.dibujar_rectangulo(SCREEN)
+    if ingreso_usuario:
+        pass
+    else:
+        if lista_teclas[pygame.K_r]:
+            cuchillo_derecha.dibujar_rectangulo(SCREEN)
+            cuchillo_izquierda.dibujar_rectangulo(SCREEN)
+            veneno_e_1.dibujar_rectangulo(SCREEN)
+            manzana_1.dibujar_rectangulo(SCREEN)
+            manzana_2.dibujar_rectangulo(SCREEN)
+            manzana_3.dibujar_rectangulo(SCREEN)
+            manzana_4.dibujar_rectangulo(SCREEN)
+            manzana_5.dibujar_rectangulo(SCREEN)
+            manzana_6.dibujar_rectangulo(SCREEN)
+            manzana_7.dibujar_rectangulo(SCREEN)
+            piso_plataforma.dibujar_rectangulo(SCREEN)
+            piso_bloque_grande_1.dibujar_rectangulo(SCREEN)
+            piso_bloque_grande_2.dibujar_rectangulo(SCREEN)
+            piso_bloque_grande_3.dibujar_rectangulo(SCREEN)
+            piso_bloque_grande_4.dibujar_rectangulo(SCREEN)
+            piso_bloque_chico_1.dibujar_rectangulo(SCREEN)
+            piso_bloque_chico_2.dibujar_rectangulo(SCREEN)
+            piso_bloque_chico_3.dibujar_rectangulo(SCREEN)
+            escorpion_1.dibujar_rectangulo(SCREEN)
+            escorpion_2.dibujar_rectangulo(SCREEN)
+            escorpion_3.dibujar_rectangulo(SCREEN)
+            escorpion_4.dibujar_rectangulo(SCREEN)
+            luchador.dibujar_rectangulo(SCREEN)
 
     pygame.display.flip()

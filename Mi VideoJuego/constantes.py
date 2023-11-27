@@ -43,10 +43,10 @@ POS_TEXTO_VIDAS = (3, 0)
 #Texto "manzanas comidas"
 POS_TEXTO_MANZANAS_COMIDAS = (635, 5)
 #Texto rectangulo juego terminado
-POS_TEXTO_GAME_OVER = (380, 150)
-POS_TEXTO_SCORE = (335, 220)
-POS_TEXTO_SCORE_PUNTOS = (415, 300)
-POS_TEXTO_REINICIAR = (430, 450)
+POS_TEXTO_GAME_OVER = (330, 150)
+POS_TEXTO_SCORE = (285, 220)
+POS_TEXTO_SCORE_PUNTOS = (365, 300)
+POS_TEXTO_REINICIAR = (380, 450)
 #Texto misiones
 POS_TEXTO_MISIONES = [40, 35]
 POS_TEXTO_ENTENDIDO = (445, 365)
@@ -65,6 +65,14 @@ Para eso puedes ayudarte con la tecla 'F'
 con la cual puedes disparar cuchillos.
 Recuerda que solo puedes usarlos cada 
 cierto tiempo"""
+#Texto nombre usuario
+POS_TEXTO_NOMBRE_USUARIO = (405, 305)
+POS_TEXTO_INGRESE_NOMBRE = (325, 100)
+#Texto puntaje
+POS_TEXTO_CABEZERA_PUNTAJE = (675, 155)
+POS_TEXTO_IDS = [680, 160]
+POS_TEXTO_NOMBRES = [740, 160]
+POS_TEXTO_PUNTAJES = [900, 160]
 
 #CORAZONES-------------------------
 RUTA_CORAZON = "IMAGENES\corazon.png"
@@ -114,15 +122,20 @@ RUTA_LUCHADOR_SALTO_IZQUIERDA = "IMAGENES\saltoIzquierda3.png"
 
 #RECTANGULOS-------------------------
 #Rectangulos juego terminado
-POS_REC_GAME_OVER = (300, 100)
+POS_REC_GAME_OVER = (250, 100)
 TAMAÑO_REC_GAME_OVER = (400, 500)
-POS_REC_REINICIAR = [400, 420]
+POS_REC_REINICIAR = (350, 420)
 TAMAÑO_REC_REINICIAR = (200, 100)
 #Rectangulos Texto Misiones
 POS_REC_MISIONES = (25, 25)
 TAMAÑO_REC_MISIONES = (600, 300)
 POS_REC_ENTENDIDO = (425, 340)
 TAMAÑO_REC_ENTENDIDO = (200, 100)
+POS_REC_INGRESO_USUARIO = (400, 300)
+TAMAÑO_REC_INGRESO_USUARIO = (200, 50)
+#Rectangulo Puntaje
+POS_REC_PUNTAJE = (660, 150)
+TAMAÑO_REC_PUNTAJE = (330, 220)
 
 #VENENO-------------------------
 RUTA_VENENO_D = "IMAGENES\\venenoDerecha.png"

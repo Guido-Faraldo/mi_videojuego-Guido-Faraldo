@@ -19,8 +19,8 @@ class Texto:
     def desaparcer_texto(self):
         self.texto = self.texto_invisible
 
-    def mostrar_texto_con_saltos(self, screen):
-        self.posicion = [40, 35]
+    def mostrar_texto_con_saltos(self, screen, pos):
+        self.posicion = pos
         for linea in self.texto.split('\n'):
             texto = self.fuente.render(linea, True, self.color)
             screen.blit(texto, self.posicion)
