@@ -10,7 +10,7 @@ from mis_funciones import *
 pygame.init()
 conexion = crear_tabla("puntajes_mi_videojuego.bd")
 agregar_datos = False
-ingreso_usuario = True 
+ingreso_usuario = True
 nombre_usuario = ""
 contador_escorpiones_muertos = 0
 desaparecer_escorpion_1 = False
